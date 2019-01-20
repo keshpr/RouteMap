@@ -42,9 +42,14 @@
       "speed":37
       }
       }
+      paths = geoData.path_list;
+      len = paths.length;
+      for(i = 0; i < len; i++){
+		     console.log("i:" + i);
+		     L.geoJSON(paths[i],
+		     {onEachFeature: onEachFeature}).addTo(mymap);
+		     }
       
-      L.geoJSON(geoData,
-      {onEachFeature: onEachFeature}).addTo(mymap);
       }
       });
       });
