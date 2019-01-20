@@ -29,7 +29,7 @@ def getPath(filename):
     for i in range(1, len(coords)):
         nex = coords[i]
         properties = getProperties(curr['speed'], curr['dist'])
-        latlng = [[curr['lat'], curr['lng']], [nex['lat'], nex['lng']]]
+        latlng = [[curr['lng'], curr['lat']], [nex['lng'], nex['lat']]]
         feature = getFeature(latlng, GEO_TYPE, properties)
         feature_collection["features"].append(feature)
         curr = nex

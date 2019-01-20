@@ -6,6 +6,7 @@
     <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
 	    integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
 	    crossorigin=""></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   </head>
   <body>
     <div id="mapid" style="height: 250px;"></div>
@@ -16,7 +17,38 @@
   });
   
   // Now add the layer onto the map
-  mymap.addLayer(layer);
+      mymap.addLayer(layer);
+
+      function onEachFeature(feature, layer){
+      if(feature.properties && feature.properties.speed){
+      layer.bindTooltip(feature.properties.speed.toString(10), {"sticky": true});
+      console.log("In feature");
+      }
+      }
+      $(document).ready(function(){
+      console.log("Ready")
+      $.ajax({
+      url: "/geoJson",
+      dataType: "json",
+      type: "GET",
+      success: function(geoData){
+      geoD = {
+      "type": "Feature",
+      "geometry": {
+      "coordinates":[[-122, 37], [-121.5, 37.5]],
+      "type": "LineString"
+      },
+      "properties":{
+      "speed":37
+      }
+      }
+      
+      L.geoJSON(geoData,
+      {onEachFeature: onEachFeature}).addTo(mymap);
+      }
+      });
+      });
     </script>
+
   </body>
 </html>
