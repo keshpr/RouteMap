@@ -8,8 +8,17 @@ mymap.addLayer(layer);
 
 function onEachFeature(feature, layer){
     if(feature.properties && feature.properties.speed){
-	layer.bindTooltip(feature.properties.speed.toString(10), {"sticky": true});
+	var tool_tip_text = "Speed: " + feature.properties.speed.toString(10) + " Distance: " + feature.properties.distance.toString(10);
+	layer.bindTooltip(tool_tip_text, {"sticky": true});
 	console.log("In feature");
+    }
+    if(feature.properties && feature.properties.start_time){
+        layer.bindTooltip("Started at: " + feature.properties.start_time, {"sticky": true});
+        
+    }
+    if(feature.properties && feature.properties.end_time){
+        layer.bindTooltip("Ended at: "feature.properties.end_time, {"sticky": true});
+        
     }
 }
 
@@ -25,6 +34,16 @@ function getLineGeoJson(coords1, coords2){
     return geoJson;
 }
 
+function getPointGeoJson(coords, time_type, time){
+    var geoJson = {};
+    geoJson["type"] = "Feature";
+    geoJson["geometry"] = {};
+    geoJson["geometry"]["type"] = "Point";
+    geoJson["geometry"]["coordinates"] = [coords[0], coords[1]];
+    geoJson["properties"] = {};
+    geoJson["properties"][time_type] = time;
+    return geoJson;
+}
 function getGeoJsons(pathData){
     var all_jsons = [];
     
@@ -35,8 +54,13 @@ function getGeoJsons(pathData){
 	geoJson["type"] = "FeatureCollection";
 	geoJson["features"] = [];
 	var path = paths[i].l;
+	var start_coords = path.slice(0, 2);
+	var start_time = paths[i].s;	
+		
+	geoJson["features"].push(getPointGeoJson(start_coords, "start_time", start_time));
 	for(j = 0;j < path.length; j += 4)
 	{
+	    	        
 	    if(j + 4 >= path.length){
 		break;
 	    }
@@ -44,6 +68,9 @@ function getGeoJsons(pathData){
 	    var coords2 = path.slice(j + 4, j + 6);
 	    geoJson["features"].push(getLineGeoJson(coords1, coords2));
 	}
+	var end_coords = path.slice(path.length - 4, path.length - 2);
+	var end_time = paths[i].e;
+	geoJson["features"].push(getPointGeoJson(end_coords, "end_time", end_time));
 	all_jsons.push(geoJson);
     }
     return all_jsons;

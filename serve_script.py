@@ -8,6 +8,7 @@ import os
 
 PATH_TO_GEOJSONS = './geoJsons'
 PATH_TO_MINLIST = "./"
+JSON_FILE_NAME = "Paths_wtimes.json"
 
 app = Flask(__name__)
 
@@ -32,7 +33,7 @@ def sendGeoData():
 
 @app.route('/geoJson')
 def sendData():
-    file_name = os.path.join(PATH_TO_MINLIST, "Paths.json")
+    file_name = os.path.join(PATH_TO_MINLIST, JSON_FILE_NAME)
     with open(file_name) as f:
         response_data = json.load(f)
     return jsonify(response_data)
