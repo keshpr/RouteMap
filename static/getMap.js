@@ -17,7 +17,7 @@ function onEachFeature(feature, layer){
         
     }
     if(feature.properties && feature.properties.end_time){
-        layer.bindTooltip("Ended at: "feature.properties.end_time, {"sticky": true});
+        layer.bindTooltip("Ended at: " + feature.properties.end_time, {"sticky": true});
         
     }
 }
