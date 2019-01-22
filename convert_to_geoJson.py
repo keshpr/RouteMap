@@ -5,7 +5,8 @@ GEO_TYPE = "LineString"
 PATH_TO_TRIPS = "./trips"
 PATH_TO_GEOJSONS = "./geoJsons"
 PATH_TO_MINLIST = "."
-JSON_FILE_NAME = "Paths_wtimes.json"
+JSON_FILE_NAME = "Paths_wtimes_wi.json"
+
 
 def getFeature(coords, geo_type, properties):
     feature = dict()
@@ -40,13 +41,14 @@ def getPath(filename):
 
 
 NUM_TO_SKIP = 6;
-def getPath_min(filename):
+def getPath_min(filename, i):
     with open(filename) as jf:
         path_data = json.load(jf);
     coords = path_data['coords']
     path = dict()
     path['s'] = path_data['start_time']
     path['e'] = path_data['end_time']
+    path['i'] = i
     path['l'] = []
     avg_speed = coords[0]['speed']
     tot_speed = 0.0
@@ -80,13 +82,15 @@ def getFiles():
     return
 
 def getFile():
-    file_names = [os.path.join(PATH_TO_TRIPS, file_name) for file_name in os.listdir(PATH_TO_TRIPS)]
+    file_names = sorted([os.path.join(PATH_TO_TRIPS, file_name) for file_name in os.listdir(PATH_TO_TRIPS)])
 
     paths = dict()
     paths['l'] = []
+    i = 0
     for file_name in file_names:
-        feature_collection = getPath_min(file_name)
+        feature_collection = getPath_min(file_name, i)
         paths['l'].append(feature_collection)
+        i += 1
     name = JSON_FILE_NAME
     new_file = os.path.join(PATH_TO_MINLIST, name)
     with open(new_file, 'w') as outfile:
