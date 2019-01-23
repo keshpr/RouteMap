@@ -10,7 +10,34 @@ var defaultStyle = {
 };
 var infoStyle = {
     color: "#FF8C00"
-}
+};
+var defaultPointStyle = {
+    radius: 6,
+    fillColor: "#FF7800",
+    color: "#000",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8
+};
+
+var startPointStyle = {
+    radius: 6,
+    fillColor: "#00FF00",
+    color: "#000",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8
+};
+
+var endPointStyle = {
+    radius: 6,
+    fillColor: "#FF0000",
+    color: "#000",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8
+};
+
 
 // Now add the layer onto the map
 mymap.addLayer(layer);
@@ -149,7 +176,19 @@ function getPathFromServer(i){
 		data: JSON.stringify({"i":i}),
 		success: function(data){
 		var all_feature_collections = getFeatureCollections(data);
-		var path = L.geoJSON(all_feature_collections[0], {style: infoStyle, onEachFeature: onEachFeature});
+		var path = L.geoJSON(all_feature_collections[0], 
+				     {style: infoStyle, onEachFeature: onEachFeature, 
+				      pointToLayer: 
+				      function (feature, latlng) {
+					  if(feature.geometry.type == "Point" && feature.properties.start_time){
+					      return L.circleMarker(latlng, startPointStyle);    
+					  }else if(feature.geometry.type == "Point" && feature.properties.end_time){
+					      return L.circleMarker(latlng, endPointStyle);
+					  }
+					  
+				      }
+				     }
+				     );
 		path.bringToFront();
                 featureLayerCurr = path;
 		path.addTo(mymap);
@@ -162,7 +201,7 @@ function getPathFromServer(i){
 function setMouseHandler(layer){
     layer.on("mouseover", function(e){
 	    layer.setStyle(highlightStyle);
-	    
+	    layer.bringToFront();
 	});
     layer.on("mouseout", function(e){
 	    layer.setStyle(defaultStyle);
@@ -197,7 +236,8 @@ $(document).ready(function(){
 		all_paths.addTo(mymap);
 		for(i = 0; i < len; i++){
 		    console.log("i:" + i);
-		var path = L.geoJSON(all_feature_collections[i], {style: defaultStyle});
+		    var path = L.geoJSON(all_feature_collections[i], {style: defaultStyle, pointToLayer: function (feature, latlng) {
+				return L.circleMarker(latlng, defaultPointStyle);}});
 		all_paths.addLayer(path);
 		}
 		all_paths.eachLayer(setMouseHandler);
