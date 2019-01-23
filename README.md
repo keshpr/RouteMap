@@ -6,6 +6,7 @@ Information about a trip includes speed at any point and the distance covered un
 ## Requirements
 
 * Python3
+* pip
 * Flask
 
 ## Setup
