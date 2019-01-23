@@ -17,7 +17,7 @@ mymap.addLayer(layer);
 
 function onEachFeature(feature, layer){
     if(feature.properties && feature.properties.speed){
-	var tool_tip_text = "Speed: " + feature.properties.speed.toString(10) + " Distance: " + feature.properties.distance.toString(10);
+	var tool_tip_text = "Speed: " + feature.properties.speed.toFixed(1) + " Distance: " + feature.properties.distance.toFixed(1);
 	layer.bindTooltip(tool_tip_text, {"sticky": true});
 	console.log("In feature");
     }
