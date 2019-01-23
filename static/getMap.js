@@ -66,8 +66,8 @@ function hsv2rgb(h,s,v){
 function getColor(speed){
     var h = speed / 50;
     var rgb = hsv2rgb(h,1,1);
-    console.log("rgb: ");
-    console.log(rgb);
+    //console.log("rgb: ");
+    //console.log(rgb);
     var rgb_string = "#";
     for(i = 0;i < 3; i ++)
 	{
@@ -85,9 +85,9 @@ function onEachFeature(feature, layer){
     if(feature.properties && feature.properties.speed){
 	var tool_tip_text = "Speed: " + feature.properties.speed.toFixed(1) + " Distance: " + feature.properties.distance.toFixed(1) + " Time elapsed: " + feature.properties.time;
 	layer.bindTooltip(tool_tip_text, {"sticky": true});
-	console.log(getColor(feature.properties.speed));
+	//console.log(getColor(feature.properties.speed));
 	layer.setStyle({color: getColor(feature.properties.speed)});
-	console.log("In feature");
+	//console.log("In feature");
     }
     if(feature.properties && feature.properties.start_time){
         layer.bindTooltip("Started at: " + feature.properties.start_time, {"sticky": true});
@@ -153,7 +153,7 @@ function getFeatureCollections(pathData){
 	var path = paths[i].l;
 	var start_coords = path.slice(0, 2);
 	var start_time = paths[i].s;	
-	console.log(start_coords);
+	//console.log(start_coords);
 	geoJson["features"].push(getPointGeoJson(start_coords, "start_time", start_time));
 	for(j = 0;j < path.length; j += 5)
 	{
@@ -223,7 +223,7 @@ function getPathFromServer(i){
 		data: JSON.stringify({"i":i}),
 		success: function(data){
 		var all_feature_collections = getFeatureCollections(data);
-		console.log(all_feature_collections[0]);
+		//console.log(all_feature_collections[0]);
 		var path = L.geoJSON(all_feature_collections[0], 
 				     {onEachFeature: onEachFeature,
 				      pointToLayer: 
@@ -268,7 +268,7 @@ function setMouseHandler(layer){
 		
 		break;
 	    }
-	    console.log(e.target._layers);
+	    //console.log(e.target._layers);
 	    getPathFromServer(i);
 
 	    //e.stopPropagation();
@@ -282,13 +282,13 @@ $(document).ready(function(){
 		dataType: "json",
 		type: "GET",
 		success: function(pathData){
-		console.log(pathData.l.length);
+		//console.log(pathData.l.length);
 		var all_geometry_collections = getGeometryCollections(pathData);
 		len = all_geometry_collections.length;
 		all_paths = new L.featureGroup();
 		all_paths.addTo(mymap);
 		for(i = 0; i < len; i++){
-		    console.log("i:" + i);
+		    //console.log("i:" + i);
 		    var path = L.geoJSON(all_geometry_collections[i], {style: defaultStyle, pointToLayer: function (feature, latlng) {
 				return L.circleMarker(latlng, defaultPointStyle);}});
 		all_paths.addLayer(path);
