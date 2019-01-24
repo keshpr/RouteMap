@@ -1,7 +1,8 @@
 # RouteMap
 
 Interactive web app depicting around 500 trips on a map simultaneously. 
-Information about a trip includes speed at any point and the distance covered until that point. 
+Information about a trip includes speed at any point, and the distance covered and the time taken until that point. 
+Click on a path to visualize the speed distribution and also to get said information. 
 
 ## Requirements
 
